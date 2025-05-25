@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: Enhancing LLM Scientific Reference Accuracy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA; 
+            color: #073B4C; 
+        }
+        .chart-container {
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .section-title {
+            color: #118AB2; 
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.5rem; /* 8px */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem; /* 24px */
+            margin-bottom: 1.5rem; /* 24px */
+        }
+        .big-number {
+            font-size: 2.25rem; /* 36px */
+            line-height: 2.5rem; /* 40px */
+            font-weight: 700;
+            color: #FF6B6B; 
+            line-height: 1.1;
+        }
+        .flowchart-step {
+            border: 2px solid #118AB2; 
+            color: #073B4C;
+            background-color: #FFFFFF;
+            padding: 0.75rem; /* 12px */
+            border-radius: 0.375rem; /* 6px */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            text-align: center;
+            min-width: 120px;
+        }
+        .flowchart-arrow {
+            color: #118AB2; 
+            font-size: 1.5rem; /* 24px */
+            font-weight: bold;
+            margin-left: 0.5rem; /* 8px */
+            margin-right: 0.5rem; /* 8px */
+        }
+        .swot-category-title {
+            font-size: 1.25rem; /* 20px */
+            line-height: 1.75rem; /* 28px */
+            font-weight: 600;
+            margin-bottom: 0.5rem; /* 8px */
+        }
+        .swot-strengths { color: #06D6A0; border-color: #06D6A0; background-color: #F0FDF4; } /* Teal */
+        .swot-weaknesses { color: #FF6B6B; border-color: #FF6B6B; background-color: #FFF1F2; } /* Coral */
+        .swot-opportunities { color: #118AB2; border-color: #118AB2; background-color: #EFF6FF; } /* Blue */
+        .swot-threats { color: #FFD166; border-color: #FFD166; background-color: #FFFBEB; } /* Yellow */
+        
+        .table th, .table td {
+            border-color: #E5E7EB; /* Tailwind gray-200 */
+            padding: 0.75rem; /* 12px */
+            text-align: left;
+        }
+        .table th {
+            background-color: #F3F4F6; /* Tailwind gray-100 */
+        }
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .sticky-nav a {
+            color: #073B4C;
+            transition: color 0.3s ease;
+        }
+        .sticky-nav a:hover {
+            color: #118AB2;
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-gradient-to-r from-sky-700 via-sky-600 to-cyan-600 text-white p-6 md:p-10 text-center shadow-lg">
+        <h1 class="text-3xl md:text-4xl font-bold mb-2">Enhancing Scientific Reference Accuracy in Large Language Models</h1>
+        <p class="text-lg md:text-xl opacity-90">An Infographic on Evaluating Agentic Frameworks and Charting the Path to Trustworthy AI in Research</p>
+    </header>
+
+    <nav class="sticky-nav hidden md:block">
+        <div class="container mx-auto px-4">
+            <ul class="flex justify-center space-x-4 lg:space-x-6 text-sm font-medium">
+                <li><a href="#crisis">The Crisis</a></li>
+                <li><a href="#shortcomings">LLM Shortcomings</a></li>
+                <li><a href="#agentic-solution">Agentic Solution</a></li>
+                <li><a href="#ecosystem">Tool Ecosystem</a></li>
+                <li><a href="#comparison">Comparison</a></li>
+                <li><a href="#swot">SWOT</a></li>
+                <li><a href="#recommendations">Path Forward</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="crisis" class="mb-12 pt-8 -mt-8 md:pt-12 md:-mt-12">
+            <div class="card">
+                <h2 class="text-2xl md:text-3xl font-bold section-title mb-6 text-center">The Crisis of Credibility: LLMs & Scientific References</h2>
+                <p class="text-md md:text-lg mb-6 text-slate-700 leading-relaxed">
+                    Large Language Models (LLMs) are revolutionizing scientific research, yet their documented struggle with generating accurate scientific references poses a significant threat to academic integrity. This "crisis of credibility" stems from errors like fabricated sources ("extrinsic hallucinations") and incorrect attributions, undermining the verifiability foundational to science. As LLMs become more embedded in high-stakes domains, the reliability of their outputs is critical.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <div class="md:col-span-1 text-center p-4 space-y-6">
+                        <div>
+                            <div class="big-number">~27%</div>
+                            <p class="text-lg font-semibold text-slate-800 mt-1">Hallucination Rate</p>
+                            <p class="text-sm text-slate-600">LLMs can hallucinate references up to 27% of the time (Source: Report Sec 2, Ref [9]).</p>
+                        </div>
+                        <div>
+                            <div class="big-number">~46%</div>
+                            <p class="text-lg font-semibold text-slate-800 mt-1">Outputs with Factual Errors</p>
+                            <p class="text-sm text-slate-600">Factual errors may appear in as much as 46% of LLM outputs (Source: Report Sec 2, Ref [9]).</p>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <div class="chart-container w-full max-w-md h-64 sm:h-72 md:h-80 max-h-[350px]">
+                            <canvas id="errorTypesChart"></canvas>
+                        </div>
+                        <p class="text-sm text-center mt-2 text-slate-600">Illustrative breakdown of common citation error types.</p>
+                    </div>
+                </div>
+                <p class="text-md mt-6 text-slate-700 leading-relaxed">
+                    The implications are profound: misleading researchers, distorting the scientific record, and eroding public trust. Addressing this is crucial for the integrity of science.
+                </p>
+            </div>
+        </section>
+
+        <section id="shortcomings" class="mb-12 pt-8 -mt-8 md:pt-12 md:-mt-12">
+            <div class="card">
+                <h2 class="text-2xl md:text-3xl font-bold section-title mb-6 text-center">Understanding LLM Shortcomings in Scientific Referencing</h2>
+                <p class="text-md md:text-lg mb-8 text-slate-700 leading-relaxed text-center">
+                    LLMs' difficulties with accurate scientific referencing stem from their fundamental architecture, training data limitations, and the specific challenges posed by structured bibliographic information.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-5 border border-slate-200 rounded-lg bg-sky-50 hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-semibold text-sky-700 mb-2">1. Probabilistic Nature</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">LLMs predict next tokens based on statistical patterns, not factual understanding. They might generate plausible-sounding but incorrect references because the sequence *looks* familiar from training data, not because it's verified.</p>
+                    </div>
+                    <div class="p-5 border border-slate-200 rounded-lg bg-teal-50 hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-semibold text-teal-700 mb-2">2. Training Data Limitations</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Training data can contain biases, misinformation, and be outdated (knowledge cutoffs). Crucially, LLMs often lack access to paywalled scholarly databases, limiting their knowledge of the full research landscape.</p>
+                    </div>
+                    <div class="p-5 border border-slate-200 rounded-lg bg-amber-50 hover:shadow-lg transition-shadow">
+                        <h3 class="text-xl font-semibold text-amber-700 mb-2">3. Structured Data Difficulty</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">Bibliographic information (e.g., BibTeX) is highly structured. LLMs, designed for natural language, struggle with the rigid syntax and precise field requirements of such formats, leading to formatting errors or incomplete entries.</p>
+                    </div>
+                </div>
+                 <p class="text-md mt-8 text-slate-700 leading-relaxed">
+                    These issues lead to various errors, including fabricating non-existent sources (extrinsic hallucinations), misrepresenting content of real sources (intrinsic hallucinations), and formatting mistakes. The "plausibility trap"—where errors look correct—makes them hard to detect without careful verification.
+                </p>
+            </div>
+        </section>
+
+        <section id="agentic-solution" class="mb-12 pt-8 -mt-8 md:pt-12 md:-mt-12">
+            <div class="card">
+                <h2 class="text-2xl md:text-3xl font-bold section-title mb-4 text-center">Proposed Solution: Agentic Frameworks</h2>
+                <p class="text-md md:text-lg mb-6 text-slate-700 leading-relaxed text-center">
+                    Agentic AI systems offer a robust approach by enabling LLMs to plan, use external tools, and interact with authoritative bibliographic sources. This moves beyond simple generation towards verified citation construction.
+                </p>
+                <h3 class="text-xl font-semibold text-sky-700 mb-6 text-center">Workflow of an Agentic Citation System</h3>
+                <div class="overflow-x-auto p-2">
+                    <div class="flex flex-col md:flex-row items-stretch md:items-center justify-around space-y-3 md:space-y-0 md:space-x-2 text-xs">
+                        <div class="flowchart-step flex-1">Input & Initial Generation</div>
+                        <div class="flowchart-arrow self-center transform md:rotate-0 rotate-90">&rarr;</div>
+                        <div class="flowchart-step flex-1">Info Extraction & Query Formulation</div>
+                        <div class="flowchart-arrow self-center transform md:rotate-0 rotate-90">&rarr;</div>
+                        <div class="flowchart-step flex-1">Tool Selection & Execution</div>
+                        <div class="flowchart-arrow self-center transform md:rotate-0 rotate-90">&rarr;</div>
+                        <div class="flowchart-step flex-1">Data Retrieval & Reconciliation</div>
+                    </div>
+                    <div class="flex justify-center my-3 md:my-4"> <div class="flowchart-arrow transform rotate-90">&darr;</div></div>
+                     <div class="flex flex-col md:flex-row-reverse items-stretch md:items-center justify-around space-y-3 md:space-y-0 md:space-x-2 md:space-x-reverse text-xs">
+                        <div class="flowchart-step flex-1">Self-Correction & User Interaction</div>
+                        <div class="flowchart-arrow self-center transform md:rotate-180 rotate-90">&rarr;</div>
+                        <div class="flowchart-step flex-1">Formatting & Output (e.g. BibTeX)</div>
+                        <div class="flowchart-arrow self-center transform md:rotate-180 rotate-90">&rarr;</div>
+                        <div class="flowchart-step flex-1">Interaction with User's Biblio. Software</div>
+                        <div class="flowchart-arrow self-center transform md:rotate-180 rotate-90">&rarr;</div>
+                        <div class="flowchart-step flex-1">Verification (DOI, Metadata)</div>
+                    </div>
+                </div>
+                 <p class="text-md mt-8 text-slate-700 leading-relaxed">
+                    This iterative process involves the LLM core, memory, planning, and tool use modules to query bibliographic software (like Mendeley, Zotero) and academic databases (like Web of Science, PubMed, CrossRef), verify details, and format citations correctly. This systematic approach aims to significantly reduce citation errors.
+                </p>
+            </div>
+        </section>
+
+        <section id="ecosystem" class="mb-12 pt-8 -mt-8 md:pt-12 md:-mt-12">
+            <div class="card">
+                <h2 class="text-2xl md:text-3xl font-bold section-title mb-6 text-center">The Bibliographic Ecosystem: Key Tools for Agents</h2>
+                <p class="text-md md:text-lg mb-6 text-slate-700 leading-relaxed">
+                    Effective agentic systems rely on APIs to interact with various bibliographic software and academic databases. The availability and robustness of these APIs are crucial for retrieving and verifying citation data. (Data from Report Table 1)
+                </p>
+                <div class="overflow-x-auto shadow-md rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200 table">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="px-3 py-2 md:px-4 md:py-3 text-xs font-medium text-slate-600 uppercase tracking-wider">Tool/Database</th>
+                                <th class="px-3 py-2 md:px-4 md:py-3 text-xs font-medium text-slate-600 uppercase tracking-wider">API Potential</th>
+                                <th class="px-3 py-2 md:px-4 md:py-3 text-xs font-medium text-slate-600 uppercase tracking-wider">Key Data Provided</th>
+                                <th class="px-3 py-2 md:px-4 md:py-3 text-xs font-medium text-slate-600 uppercase tracking-wider hidden sm:table-cell">Challenges</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm text-slate-700">
+                            <tr><td class="font-medium">Mendeley</td><td>High</td><td>Metadata, PDFs, collections</td><td class="hidden sm:table-cell">OAuth, API changes</td></tr>
+                            <tr><td class="font-medium">Zotero</td><td>High</td><td>Metadata, full-text links, tags</td><td class="hidden sm:table-cell">Query refinement may be needed</td></tr>
+                            <tr><td class="font-medium">Web of Science</td><td>High</td><td>Comprehensive metadata, metrics</td><td class="hidden sm:table-cell">Subscription, API keys</td></tr>
+                            <tr><td class="font-medium">CrossRef</td><td>High</td><td>DOI resolution, metadata</td><td class="hidden sm:table-cell">DOI-centric, not discovery</td></tr>
+                            <tr><td class="font-medium">PubMed</td><td>High</td><td>Biomedical literature metadata</td><td class="hidden sm:table-cell">Biomedical focus</td></tr>
+                            <tr><td class="font-medium">Google Scholar</td><td>Low-Medium</td><td>Metadata, abstracts (unofficial)</td><td class="hidden sm:table-cell">No official API, unstable</td></tr>
+                            <tr><td class="font-medium">EndNote</td><td>Low-Medium</td><td>Metadata (via specific integrations)</td><td class="hidden sm:table-cell">Limited public API</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-md mt-6 text-slate-700 leading-relaxed">
+                    While many key databases offer robust APIs, inconsistencies and limitations (e.g., for EndNote or an official Google Scholar API) present challenges for universal agentic integration. Standardized "bibliographic agent" APIs could simplify development.
+                </p>
+            </div>
+        </section>
+
+        <section id="comparison" class="mb-12 pt-8 -mt-8 md:pt-12 md:-mt-12">
+             <div class="card">
+                <h2 class="text-2xl md:text-3xl font-bold section-title mb-6 text-center">Comparing Solutions: Approaches to Citation Accuracy</h2>
+                <p class="text-md md:text-lg mb-6 text-slate-700 leading-relaxed">
+                    Agentic frameworks are part of a broader landscape of solutions. Other notable approaches include Retrieval Augmented Generation (RAG), fine-tuning LLMs, and employing Knowledge Graphs. Each has distinct strengths and complexities. (Data synthesized from Report Table 2)
+                </p>
+                <div class="chart-container w-full max-w-2xl h-80 md:h-[450px] max-h-[550px]">
+                    <canvas id="approachesComparisonChart"></canvas>
+                </div>
+                <p class="text-md mt-6 text-slate-700 leading-relaxed">
+                    The chart compares key approaches based on their potential impact on citation accuracy and estimated implementation complexity (1=Low, 5=High). While agentic frameworks offer high impact, they also entail high complexity. Hybrid systems, combining strengths, are likely most effective long-term, but involve trade-offs in cost and complexity.
+                </p>
+            </div>
+        </section>
+
+        <section id="swot" class="mb-12 pt-8 -mt-8 md:pt-12 md:-mt-12">
+            <div class="card">
+                <h2 class="text-2xl md:text-3xl font-bold section-title mb-6 text-center">Agentic Frameworks: A SWOT Analysis</h2>
+                <p class="text-md md:text-lg mb-6 text-slate-700 leading-relaxed text-center">
+                    A critical look at the Strengths, Weaknesses, Opportunities, and Threats for agentic frameworks in improving scientific citation accuracy, based on Report Section 6.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div class="p-4 border-2 rounded-lg swot-strengths">
+                        <h3 class="swot-category-title">Strengths 💪</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-1 leading-relaxed">
+                            <li>Improved accuracy via multi-source verification</li>
+                            <li>Automation of literature management tasks</li>
+                            <li>Enhanced verifiability and trust through transparency</li>
+                            <li>Adaptability and learning from user feedback</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border-2 rounded-lg swot-weaknesses">
+                        <h3 class="swot-category-title">Weaknesses ⚠️</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-1 leading-relaxed">
+                            <li>High dependency on variable/unstable external APIs</li>
+                            <li>High development complexity & operational overhead (latency, cost)</li>
+                            <li>Challenges in data consistency and reconciliation</li>
+                            <li>Potential for inherited bias, security/privacy risks</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border-2 rounded-lg swot-opportunities">
+                        <h3 class="swot-category-title">Opportunities 🚀</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-1 leading-relaxed">
+                            <li>Development of standardized bibliographic APIs</li>
+                            <li>Creation of benchmark datasets for citation accuracy</li>
+                            <li>Advanced hybrid models combining multiple techniques</li>
+                            <li>Proactive error detection and prevention mechanisms</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 border-2 rounded-lg swot-threats">
+                        <h3 class="swot-category-title">Threats 📉</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-1 leading-relaxed">
+                            <li>API instability crippling system functionality</li>
+                            <li>High operational costs hindering widespread adoption</li>
+                            <li>Data fragmentation leading to unreliable outputs</li>
+                            <li>Slow user adoption if perceived as complex or untrustworthy</li>
+                            <li>Risk of over-engineering for simpler use cases</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recommendations" class="mb-12 pt-8 -mt-8 md:pt-12 md:-mt-12">
+            <div class="card">
+                <h2 class="text-2xl md:text-3xl font-bold section-title mb-6 text-center">The Path Forward: Recommendations & Human Oversight</h2>
+                <p class="text-md md:text-lg mb-8 text-slate-700 leading-relaxed text-center">
+                    Advancing trustworthy AI in science requires strategic development of agentic systems, continued research, and a strong emphasis on human oversight. (Based on Report Section 7)
+                </p>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-sky-700 mb-3">Best Practices for Agentic Systems:</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-2 text-sm md:text-base leading-relaxed">
+                            <li>**Modular Design:** Separate modules for tasks like query understanding, tool selection, specific database interaction, and formatting.</li>
+                            <li>**Robust Error Handling:** Implement retries, timeouts, and fallback mechanisms for API failures or inconsistent data.</li>
+                            <li>**Prioritize Verifiable Sources:** Preferentially query and trust high-authority databases (WoS, PubMed, CrossRef).</li>
+                            <li>**Transparency & Explainability:** Provide audit trails of agent actions (sources queried, data retrieved, conflicts resolved).</li>
+                            <li>**User-in-the-Loop:** Incorporate mechanisms for human review, correction, and feedback, especially for ambiguous cases.</li>
+                            <li>**Continuous Evaluation:** Benchmark system performance on accuracy, completeness, latency, and robustness.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-teal-700 mb-3">Key Areas for Further Research:</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-2 text-sm md:text-base leading-relaxed">
+                            <li>**Standardized Bibliographic APIs:** Advocate for open, comprehensive APIs across platforms to simplify agent development.</li>
+                            <li>**Benchmark Datasets:** Create large-scale, diverse datasets for training and evaluating citation accuracy.</li>
+                            <li>**Advanced Hybrid Models:** Explore tighter integration of agentic frameworks with fine-tuned LLMs, RAG, KGs, and symbolic processors.</li>
+                            <li>**Proactive Error Detection:** Develop agents that can identify potential errors based on ambiguity or known LLM weaknesses.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-lg mt-10 font-semibold text-center text-slate-800 border-t border-slate-200 pt-6">
+                    The Indispensable Role of Human Oversight: While AI can augment and automate, the critical judgment and diligent oversight of human researchers remain paramount to uphold the integrity of scholarly communication.
+                </p>
+            </div>
+        </section>
+
+        <section id="conclusion" class="pt-8 -mt-8 md:pt-12 md:-mt-12">
+            <div class="card bg-sky-700 text-white">
+                 <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">Conclusion: Towards Trustworthy AI in Science</h2>
+                 <p class="text-md md:text-lg leading-relaxed opacity-90">
+                    The journey towards reliable LLM-assisted scientific research requires a multi-pronged strategy. Agentic frameworks, by orchestrating LLMs with external bibliographic tools and databases, offer a powerful pathway to enhance citation accuracy. However, their success hinges on overcoming significant technical and operational challenges, including API limitations and system complexity. Continued advancements in LLM technology, coupled with the development of standardized resources, robust evaluation benchmarks, and a strong emphasis on human-AI collaboration, are essential. Ultimately, while AI provides powerful tools, human expertise remains indispensable for safeguarding the integrity and rigor of scientific communication in this new era.
+                 </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center p-6 bg-slate-800 text-slate-300 text-xs md:text-sm">
+        <p>&copy; 2025 LLM Reference Accuracy Initiative. Infographic based on the Deep Research Report: "Enhancing Scientific Reference Accuracy in Large Language Models: An Evaluation of Agentic Frameworks."</p>
+        <p>This infographic is for informational purposes and synthesizes key findings from the report.</p>
+    </footer>
+
+    <script>
+        const CHART_COLORS = {
+            teal: '#06D6A0',
+            yellow: '#FFD166',
+            coral: '#FF6B6B',
+            blue: '#118AB2',
+            purple: '#7E57C2',
+            darkBlueText: '#073B4C',
+            lightGrayGrid: '#E5E7EB',
+            white: '#FFFFFF'
+        };
+
+        function wrapLabel(label, maxWidth = 16) {
+            if (typeof label !== 'string' || label.length <= maxWidth) {
+                return label;
+            }
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            if (currentLine.trim().length > 0) {
+                lines.push(currentLine.trim());
+            }
+            return lines.length > 0 ? lines : [label];
+        }
+
+        const tooltipTitleCallback = function(tooltipItems) {
+            const item = tooltipItems[0];
+            if (!item || !item.chart.data.labels || item.dataIndex === undefined) return '';
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            }
+            return label;
+        };
+
+        const commonChartOptions = (legendPos = 'top', titleText = null) => ({
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: legendPos,
+                    labels: {
+                        color: CHART_COLORS.darkBlueText,
+                        font: { size: 11, family: 'Inter' },
+                        boxWidth: 15,
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    },
+                    backgroundColor: CHART_COLORS.darkBlueText,
+                    titleColor: CHART_COLORS.white,
+                    bodyColor: CHART_COLORS.white,
+                    padding: 10,
+                    cornerRadius: 4,
+                    titleFont: { family: 'Inter', weight: 'bold' },
+                    bodyFont: { family: 'Inter' }
+                },
+                title: {
+                    display: !!titleText,
+                    text: titleText,
+                    color: CHART_COLORS.darkBlueText,
+                    font: { size: 14, weight: 'bold', family: 'Inter' },
+                    padding: { top: 5, bottom: 15 }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: CHART_COLORS.darkBlueText, font: { size: 10, family: 'Inter' } },
+                    grid: { display: false },
+                    border: { color: CHART_COLORS.lightGrayGrid }
+                },
+                y: {
+                    ticks: { color: CHART_COLORS.darkBlueText, font: { size: 10, family: 'Inter' } },
+                    grid: { color: CHART_COLORS.lightGrayGrid, drawBorder: false },
+                    border: { display: false }
+                }
+            },
+            animation: {
+                duration: 800,
+                easing: 'easeInOutQuart'
+            }
+        });
+
+        const errorTypesCtx = document.getElementById('errorTypesChart');
+        if (errorTypesCtx) {
+            new Chart(errorTypesCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: [wrapLabel('Extrinsic Hallucinations (Fabricated)'), wrapLabel('Intrinsic Hallucinations (Misrepresented)'), wrapLabel('Formatting Errors')],
+                    datasets: [{
+                        label: 'Types of Citation Errors',
+                        data: [45, 30, 25], 
+                        backgroundColor: [CHART_COLORS.coral, CHART_COLORS.yellow, CHART_COLORS.teal],
+                        borderColor: CHART_COLORS.white,
+                        borderWidth: 3,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    ...commonChartOptions('bottom', 'Illustrative Citation Error Types'),
+                    cutout: '60%',
+                }
+            });
+        }
+
+        const approachesComparisonCtx = document.getElementById('approachesComparisonChart');
+        if (approachesComparisonCtx) {
+            const approachesData = {
+                labels: [
+                    wrapLabel('Agentic Frameworks'),
+                    wrapLabel('RAG (Basic)'),
+                    wrapLabel('Fine-tuning LLMs'),
+                    wrapLabel('Hybrid LLM-Symbolic'),
+                    wrapLabel('Knowledge Graphs (KGs)')
+                ],
+                datasets: [
+                    {
+                        label: 'Potential Impact on Accuracy',
+                        data: [5, 4, 4, 4.5, 4.5], 
+                        backgroundColor: CHART_COLORS.teal + 'E6', // Added alpha for slight transparency
+                        borderColor: CHART_COLORS.teal,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.7
+                    },
+                    {
+                        label: 'Estimated Complexity',
+                        data: [5, 3, 4.5, 4, 5], 
+                        backgroundColor: CHART_COLORS.coral + 'E6', // Added alpha
+                        borderColor: CHART_COLORS.coral,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.7
+                    }
+                ]
+            };
+            new Chart(approachesComparisonCtx.getContext('2d'), {
+                type: 'bar',
+                data: approachesData,
+                options: {
+                    ...commonChartOptions('top', 'Solution Approaches: Impact vs. Complexity (1=Low, 5=High)'),
+                    indexAxis: 'y', // Horizontal bar chart for better label readability
+                    scales: {
+                        x: {
+                            ...commonChartOptions().scales.x,
+                            beginAtZero: true,
+                            max: 5.5,
+                            title: { display: true, text: 'Score (1=Low, 5=High)', color: CHART_COLORS.darkBlueText, font: {weight: '600', family: 'Inter'}},
+                            ticks: { stepSize: 1 }
+                        },
+                        y: {
+                           ...commonChartOptions().scales.y,
+                           ticks: { font: { size: 9, family: 'Inter' } }, // Smaller font for y-axis labels
+                           grid: { display: false } // Cleaner look for horizontal bars
+                        }
+                    },
+                }
+            });
+        }
+
+        // Sticky Nav scroll active state (optional enhancement)
+        const sections = document.querySelectorAll('main section[id]');
+        const navLinks = document.querySelectorAll('.sticky-nav a');
+
+        function changeNav(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.2) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('text-sky-500', 'font-semibold');
+                        link.classList.add('text-slate-700');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('text-sky-500', 'font-semibold');
+                            link.classList.remove('text-slate-700');
+                        }
+                    });
+                }
+            });
+        }
+
+        if (sections.length > 0 && navLinks.length > 0 && window.IntersectionObserver) {
+            const observerOptions = {
+                root: null, 
+                rootMargin: "-50% 0px -50% 0px", // Trigger when section is in middle of viewport
+                threshold: 0 // As soon as any part is visible within margin
+            };
+            const observer = new IntersectionObserver(changeNav, observerOptions);
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+    </script>
+</body>
+</html>
