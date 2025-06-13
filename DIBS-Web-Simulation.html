@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Fluidized Bed Simulation (DIBS)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 16px; height: 16px;
+            background: #3b82f6; border-radius: 50%;
+            cursor: pointer; margin-top: -6px;
+        }
+        .slider-thumb::-moz-range-thumb {
+            width: 16px; height: 16px;
+            background: #3b82f6; border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex flex-col lg:flex-row h-screen overflow-hidden">
+
+    <!-- CONTROLS SIDEBAR -->
+    <div class="w-full lg:w-80 bg-gray-800 p-6 overflow-y-auto space-y-6 flex-shrink-0">
+        <div class="text-center">
+            <h1 class="text-2xl font-bold text-white">3D DIBS Control Panel</h1>
+            <p class="text-sm text-gray-400 mt-1">Adjust parameters and run the simulation.</p>
+        </div>
+
+        <!-- SIMULATION CONTROLS -->
+        <div class="space-y-4 bg-gray-900 p-4 rounded-lg shadow-lg">
+            <h2 class="text-lg font-semibold text-blue-400 border-b border-gray-700 pb-2">Simulation</h2>
+            <div class="flex items-center justify-between gap-4">
+                <button id="startStopBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300">Start</button>
+                <button id="resetBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300">Reset</button>
+            </div>
+            <div id="stats" class="text-sm text-center text-gray-400 pt-2">
+                <p>Time: <span id="timeDisplay" class="font-mono text-white">0.00</span> s</p>
+                <p>Bubbles: <span id="bubbleCount" class="font-mono text-white">0</span></p>
+            </div>
+        </div>
+
+        <!-- BED & FLOW PARAMETERS -->
+        <div class="space-y-4 bg-gray-900 p-4 rounded-lg shadow-lg">
+            <h2 class="text-lg font-semibold text-blue-400 border-b border-gray-700 pb-2">Bed & Flow</h2>
+            <div class="space-y-1">
+                <label for="dbed" class="text-sm font-medium">Bed Diameter (cm): <span id="dbedVal" class="font-mono text-white">22.9</span></label>
+                <input type="range" id="dbed" min="10" max="50" value="22.9" step="0.1" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+            <div class="space-y-1">
+                <label for="hbed" class="text-sm font-medium">Bed Height (cm): <span id="hbedVal" class="font-mono text-white">65.0</span></label>
+                <input type="range" id="hbed" min="20" max="150" value="65" step="1" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+             <div class="space-y-1">
+                <label for="evel" class="text-sm font-medium">Excess Gas Velocity (cm/s): <span id="evelVal" class="font-mono text-white">4.65</span></label>
+                <input type="range" id="evel" min="1" max="20" value="4.65" step="0.05" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+        </div>
+
+        <!-- BUBBLE FORMATION PARAMETERS -->
+        <div class="space-y-4 bg-gray-900 p-4 rounded-lg shadow-lg">
+            <h2 class="text-lg font-semibold text-blue-400 border-b border-gray-700 pb-2">Bubble Formation</h2>
+            <div class="space-y-1">
+                <label for="bform" class="text-sm font-medium">Formation Model</label>
+                <select id="bform" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2 text-sm">
+                    <option value="1">1: Random on Grid</option>
+                    <option value="4" selected>4: Central Orifice</option>
+                    <option value="7">7: Ring Distributor</option>
+                </select>
+            </div>
+            <div class="space-y-1">
+                <label for="bsiz" class="text-sm font-medium">Initial Diameter (cm): <span id="bsizVal" class="font-mono text-white">2.0</span></label>
+                <input type="range" id="bsiz" min="0.5" max="5" value="2.0" step="0.1" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+        </div>
+    </div>
+
+    <!-- VISUALIZATION CANVAS -->
+    <div id="canvas-container" class="flex-grow flex items-center justify-center p-4 bg-gray-900">
+        <canvas id="simulationCanvas"></canvas>
+    </div>
+
+    <!-- THREE.js Libraries -->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+        }
+    }
+    </script>
+    
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- DOM Elements ---
+        const canvasContainer = document.getElementById('canvas-container');
+        const canvas = document.getElementById('simulationCanvas');
+        const startStopBtn = document.getElementById('startStopBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const bubbleCount = document.getElementById('bubbleCount');
+        const dbedInput = document.getElementById('dbed');
+        const hbedInput = document.getElementById('hbed');
+        const evelInput = document.getElementById('evel');
+        const bformInput = document.getElementById('bform');
+        const bsizInput = document.getElementById('bsiz');
+
+        // --- Three.js Setup ---
+        let scene, camera, renderer, controls, bedMesh, bedLevelDisk;
+        const bubbleMeshes = [];
+
+        // --- Simulation State ---
+        let simState = {};
+        let animationFrameId;
+        let isRunning = false;
+
+        function initThree() {
+            scene = new THREE.Scene();
+            
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            camera = new THREE.PerspectiveCamera(50, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
+            camera.position.set(0, 50, 150);
+            
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+            directionalLight.position.set(50, 100, 75);
+            scene.add(directionalLight);
+        }
+
+        function initializeState() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            isRunning = false;
+            startStopBtn.textContent = 'Start';
+
+            // Clean up old 3D objects
+            bubbleMeshes.forEach(mesh => {
+                scene.remove(mesh);
+                mesh.geometry.dispose();
+                mesh.material.dispose();
+            });
+            bubbleMeshes.length = 0;
+            if (bedMesh) scene.remove(bedMesh);
+            if (bedLevelDisk) scene.remove(bedLevelDisk);
+
+            const dbed = parseFloat(dbedInput.value);
+            const hbed = parseFloat(hbedInput.value);
+            const evel = parseFloat(evelInput.value);
+            const bform = parseInt(bformInput.value);
+            const bsiz = parseFloat(bsizInput.value);
+
+            simState = {
+                t: 0.0, dt: 0.02, nbub: 0, bubbles: [],
+                dbed, hbed, hmax: hbed * 1.7, evel, bform, bsiz,
+                abed: 0.25 * Math.PI * dbed**2, g: 980.0, dbmax: 0.8 * dbed,
+                grvol: 0.0, yyy: 1.0,
+            };
+
+            // Create Bed Geometry
+            const bedGeometry = new THREE.CylinderGeometry(dbed / 2, dbed / 2, simState.hmax, 32, 1, true);
+            const bedMaterial = new THREE.MeshPhongMaterial({
+                color: 0x4A90E2, transparent: true, opacity: 0.15, side: THREE.DoubleSide
+            });
+            bedMesh = new THREE.Mesh(bedGeometry, bedMaterial);
+            bedMesh.position.y = simState.hmax / 2;
+            scene.add(bedMesh);
+            
+            // Create Static Bed Level Disk
+            const diskGeometry = new THREE.CylinderGeometry(dbed/2, dbed/2, 0.2, 32);
+            const diskMaterial = new THREE.MeshPhongMaterial({color: 0x0064ff, transparent: true, opacity: 0.3});
+            bedLevelDisk = new THREE.Mesh(diskGeometry, diskMaterial);
+            bedLevelDisk.position.y = hbed;
+            scene.add(bedLevelDisk);
+            
+            resizeCanvas();
+        }
+
+        // --- UI BINDINGS ---
+        const inputs = [dbedInput, hbedInput, evelInput, bformInput, bsizInput];
+        inputs.forEach(input => {
+            const valSpan = document.getElementById(input.id + 'Val');
+            if (valSpan) valSpan.textContent = input.value;
+            input.addEventListener('input', e => {
+                if (valSpan) valSpan.textContent = e.target.value;
+                if (!isRunning) initializeState();
+            });
+        });
+
+        resetBtn.addEventListener('click', initializeState);
+        startStopBtn.addEventListener('click', () => {
+            isRunning = !isRunning;
+            startStopBtn.textContent = isRunning ? 'Stop' : 'Start';
+            if (isRunning) {
+                // Update state from UI before starting
+                Object.assign(simState, {
+                    dbed: parseFloat(dbedInput.value),
+                    hbed: parseFloat(hbedInput.value),
+                    evel: parseFloat(evelInput.value),
+                    bform: parseInt(bformInput.value),
+                    bsiz: parseFloat(bsizInput.value),
+                });
+                simState.dbmax = 0.8 * simState.dbed;
+                simState.abed = 0.25 * Math.PI * simState.dbed**2;
+                simulationLoop();
+            } else {
+                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            }
+        });
+
+        function resizeCanvas() {
+            const width = canvasContainer.clientWidth;
+            const height = canvasContainer.clientHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        }
+
+        function render() {
+            controls.update();
+            renderer.render(scene, camera);
+            timeDisplay.textContent = simState.t.toFixed(2);
+            bubbleCount.textContent = simState.nbub;
+        }
+
+        // --- SIMULATION LOGIC ---
+        function update() {
+            simState.t += simState.dt;
+
+            // 1. Update bubble positions
+            simState.bubbles.forEach((b, index) => {
+                const ar = (b.db / simState.dbed) ** 2;
+                const t1 = (ar / (1.0 - ar)) ** 2;
+                let vz = Math.sqrt(simState.g * b.db / (t1 + 2.0));
+                
+                let leadingDist = Infinity;
+                simState.bubbles.forEach(other => {
+                    if (other !== b && other.z > b.z) {
+                        const dist = Math.sqrt((b.x - other.x)**2 + (b.y - other.y)**2 + (b.z - other.z)**2);
+                        leadingDist = Math.min(leadingDist, dist);
+                    }
+                });
+
+                if (leadingDist < b.db * 3) vz *= 1.5;
+                b.z += vz * simState.dt;
+                if (b.cl < 1.0) b.cl += simState.dt * 0.5;
+
+                // Update mesh
+                const mesh = bubbleMeshes[index];
+                mesh.position.set(b.x, b.z, b.y); // Map sim y to 3D z
+                const blue = Math.max(0, 255 * (1 - b.cl));
+                const red = 255 * b.cl;
+                mesh.material.color.setRGB(red / 255, 80 / 255, blue / 255);
+            });
+
+            // 2. Coalescence
+            let coalesced;
+            do {
+                coalesced = false;
+                for (let i = simState.bubbles.length - 1; i >= 0; i--) {
+                    for (let j = i - 1; j >= 0; j--) {
+                        const b1 = simState.bubbles[i];
+                        const b2 = simState.bubbles[j];
+                        const dist = Math.sqrt((b1.x-b2.x)**2 + (b1.y-b2.y)**2 + (b1.z-b2.z)**2);
+                        
+                        if (dist < (b1.db + b2.db) / 2) {
+                            const upper = b1.z > b2.z ? b1 : b2;
+                            const lower = b1.z > b2.z ? b2 : b1;
+                            const upperIdx = simState.bubbles.indexOf(upper);
+                            const lowerIdx = simState.bubbles.indexOf(lower);
+
+                            const vol1 = (Math.PI/6) * upper.db**3;
+                            const vol2 = (Math.PI/6) * lower.db**3;
+                            upper.cl = (upper.cl * vol1 + lower.cl * vol2) / (vol1 + vol2);
+                            upper.db = Math.min(simState.dbmax, (6 * (vol1 + vol2) / Math.PI)**(1/3));
+
+                            // Remove lower bubble mesh
+                            const meshToRemove = bubbleMeshes[lowerIdx];
+                            scene.remove(meshToRemove);
+                            meshToRemove.geometry.dispose();
+                            meshToRemove.material.dispose();
+                            bubbleMeshes.splice(lowerIdx, 1);
+                            simState.bubbles.splice(lowerIdx, 1);
+                            
+                            // Update upper bubble mesh scale
+                            const newScale = upper.db / simState.bsiz;
+                            bubbleMeshes[upperIdx > lowerIdx ? upperIdx - 1 : upperIdx].scale.set(newScale, newScale, newScale);
+
+                            coalesced = true;
+                            break;
+                        }
+                    }
+                    if (coalesced) break;
+                }
+            } while (coalesced);
+
+            // 3. Remove bubbles that leave bed
+            let i = simState.bubbles.length;
+            while (i--) {
+                const b = simState.bubbles[i];
+                if (b.z - b.db / 2 > simState.hmax) {
+                    const meshToRemove = bubbleMeshes[i];
+                    scene.remove(meshToRemove);
+                    meshToRemove.geometry.dispose();
+                    meshToRemove.material.dispose();
+                    bubbleMeshes.splice(i, 1);
+                    simState.bubbles.splice(i, 1);
+                }
+            }
+            simState.nbub = simState.bubbles.length;
+
+            // 4. Bubble formation
+            simState.grvol += simState.dt * simState.yyy * simState.evel * simState.abed;
+            const bvol = Math.PI / 6 * simState.bsiz**3;
+            if (simState.grvol >= bvol) {
+                simState.grvol -= bvol;
+                const newBubble = { cl: 0.0, db: simState.bsiz };
+                const rdia = 0.5; // Ring diameter ratio
+                switch(simState.bform) {
+                    case 1: 
+                        const r = Math.random() * simState.dbed/2 * 0.9;
+                        const a = Math.random() * 2 * Math.PI;
+                        newBubble.x = r * Math.cos(a);
+                        newBubble.y = r * Math.sin(a);
+                        break;
+                    case 7: 
+                        const theta = Math.random() * 2 * Math.PI;
+                        newBubble.x = rdia * simState.dbed / 2 * Math.cos(theta);
+                        newBubble.y = rdia * simState.dbed / 2 * Math.sin(theta);
+                        break;
+                    case 4: default:
+                        newBubble.x = 0; newBubble.y = 0; break;
+                }
+                newBubble.z = newBubble.db / 2;
+                simState.bubbles.push(newBubble);
+                simState.nbub++;
+
+                const geometry = new THREE.SphereGeometry(simState.bsiz / 2, 16, 12);
+                const material = new THREE.MeshPhongMaterial({ color: 0x0050ff });
+                const newMesh = new THREE.Mesh(geometry, material);
+                newMesh.position.set(newBubble.x, newBubble.z, newBubble.y);
+                bubbleMeshes.push(newMesh);
+                scene.add(newMesh);
+            }
+        }
+
+        function simulationLoop() {
+            if (!isRunning) return;
+            update();
+            render();
+            animationFrameId = requestAnimationFrame(simulationLoop);
+        }
+
+        // --- Initial Setup ---
+        window.addEventListener('resize', resizeCanvas);
+        initThree();
+        initializeState();
+        render(); // Initial render
+    </script>
+</body>
+</html>
